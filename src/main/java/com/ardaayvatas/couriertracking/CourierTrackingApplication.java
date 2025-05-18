@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CouriertrackingApplication {
+public class CourierTrackingApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CouriertrackingApplication.class, args);
+		SpringApplication.run(CourierTrackingApplication.class, args);
 	}
 
 }
