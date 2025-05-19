@@ -7,4 +7,5 @@ public interface CourierService {
     CourierDTO findById(Long id);
     Courier saveCourier(CourierDTO courierDTO);
     boolean deleteCourier(Long id);
+    boolean existById(Long id);
 }

@@ -5,6 +5,8 @@ import com.ardaayvatas.couriertracking.data.dao.repository.CourierStoreEntranceR
 import com.ardaayvatas.couriertracking.service.intf.CourierStoreEntranceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 
 @Service
@@ -18,6 +20,7 @@ public class CourierStoreEntranceServiceImpl implements CourierStoreEntranceServ
     }
 
     @Override
+    @Transactional
     public void save(CourierStoreEntrance courierStoreEntrance) {
         courierStoreEntranceRepository.save(courierStoreEntrance);
     }

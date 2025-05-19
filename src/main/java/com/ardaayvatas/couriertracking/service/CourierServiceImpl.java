@@ -39,4 +39,9 @@ public class CourierServiceImpl implements CourierService {
         courierRepository.deleteById(id);
         return true;
     }
+
+    @Override
+    public boolean existById(Long id) {
+        return courierRepository.existsById(id);
+    }
 }

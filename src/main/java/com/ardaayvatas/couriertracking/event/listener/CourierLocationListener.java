@@ -11,7 +11,7 @@ import com.ardaayvatas.couriertracking.event.CourierLocationEvent;
 import com.ardaayvatas.couriertracking.service.intf.CourierStoreEntranceService;
 import com.ardaayvatas.couriertracking.service.intf.DistanceCalculationStrategy;
 import com.ardaayvatas.couriertracking.service.intf.StoreService;
-import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
@@ -23,18 +23,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class CourierLocationListener {
     private final StoreService storeService;
     private final CourierStoreEntranceService courierStoreEntranceService;
     private final DistanceCalculationStrategy distanceCalculationStrategy;
+    private final CourierMapper courierMapper;
 
-    public CourierLocationListener(StoreService storeService,
-                                   CourierStoreEntranceService courierStoreEntranceService,
-                                   DistanceCalculationStrategy distanceCalculationStrategy) {
-        this.distanceCalculationStrategy = distanceCalculationStrategy;
-        this.storeService = storeService;
-        this.courierStoreEntranceService = courierStoreEntranceService;
-    }
+    private static final int MAX_DISTANCE = 100;
+
 
     @Async
     @EventListener
@@ -43,36 +40,32 @@ public class CourierLocationListener {
             maxAttempts = 3,
             backoff = @Backoff(delay = 2000)
     )
-    @Transactional
     public void onCourierLocationEvent(CourierLocationEvent event) {
         CourierLocationDTO location = event.getLocation();
-
         List<StoreDTO> storeDTOList = storeService.findAll();
 
         for (StoreDTO storeDTO : storeDTOList) {
             double distance = calculateDistance(location.getLat(), location.getLng(), storeDTO.getLat(), storeDTO.getLng());
-
-            if (distance <= 100) {
-                boolean reEntered = isReEntered(location.getCourierDTO().getId(),storeDTO.getId());
-
+            if (distance <= MAX_DISTANCE) {
+                boolean reEntered = hasRecentEntrance(location.getCourierDTO().getId(),storeDTO.getId());
                 if (!reEntered) {
-                    courierStoreEntranceService.save(CourierMapper.INSTANCE.toCourierStoreEntrance(createCourierStoreEntranceDTO(location.getCourierDTO(),storeDTO)));
+                    courierStoreEntranceService.save(courierMapper.toCourierStoreEntrance(createCourierStoreEntranceDTO(location.getCourierDTO(),storeDTO)));
                 }
             }
         }
     }
 
-    private boolean isReEntered(Long courierId, Long storeId) {
+    @Recover
+    public void recover(Exception e, CourierLocationEvent event) {
+        throw new ServiceCallException(ExceptionType.EVENT_ERROR);
+    }
+
+    private boolean hasRecentEntrance(Long courierId, Long storeId) {
         return courierStoreEntranceService.existsByCourierIdAndStoreIdAndCreatedDateAfter(courierId, storeId, LocalDateTime.now().minusMinutes(1));
     }
 
     private double calculateDistance(Double lat1, Double lng1, Double lat2, Double lng2) {
         return distanceCalculationStrategy.calculateDistance(lat1, lng1, lat2, lng2);
-    }
-
-    @Recover
-    public void recover(Exception e, CourierLocationEvent event) {
-        throw new ServiceCallException(ExceptionType.EVENT_ERROR);
     }
 
     private CourierStoreEntranceDTO createCourierStoreEntranceDTO(CourierDTO courierDTO, StoreDTO storeDTO) {

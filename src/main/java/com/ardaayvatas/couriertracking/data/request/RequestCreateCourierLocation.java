@@ -6,9 +6,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RequestCreateCourier {
+public class RequestCreateCourierLocation {
     @NotNull
-    private String name;
+    private Long courierId;
     @NotNull
-    private String surname;
+    private Double lat;
+    @NotNull
+    private Double lng;
 }

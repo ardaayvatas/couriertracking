@@ -1,9 +1,9 @@
 package com.ardaayvatas.couriertracking.controller;
 
-import com.ardaayvatas.couriertracking.data.dao.model.Courier;
 import com.ardaayvatas.couriertracking.data.dto.CourierDTO;
 import com.ardaayvatas.couriertracking.data.mapper.CourierMapper;
 import com.ardaayvatas.couriertracking.data.request.RequestCreateCourier;
+import com.ardaayvatas.couriertracking.data.response.ResponseCreateCourier;
 import com.ardaayvatas.couriertracking.service.intf.CourierService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,8 +23,8 @@ public class CourierController {
 
     @PostMapping
     @Operation(summary = "Create a new courier")
-    public ResponseEntity<Courier> createCourier(@RequestBody RequestCreateCourier requestCreateCourier) {
-        return ResponseEntity.ok(courierService.saveCourier(mapper.requestCreateCourierToCourier(requestCreateCourier)));
+    public ResponseEntity<ResponseCreateCourier> createCourier(@RequestBody RequestCreateCourier requestCreateCourier) {
+        return ResponseEntity.ok(mapper.toResponseCreateCourier(courierService.saveCourier(mapper.requestCreateCourierToCourier(requestCreateCourier))));
     }
 
     @GetMapping("/{id}")
