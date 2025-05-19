@@ -15,7 +15,7 @@ public abstract class BaseEntity {
 
     @Version
     @Column(name = "VERSION")
-    private Long version;
+    private int version;
 
     @Column(name = "CREATED_DATE", nullable = false, updatable = false)
     private LocalDateTime createdDate;

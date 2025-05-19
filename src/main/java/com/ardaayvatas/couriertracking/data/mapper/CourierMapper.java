@@ -1,12 +1,17 @@
 package com.ardaayvatas.couriertracking.data.mapper;
 
+import com.ardaayvatas.couriertracking.data.dao.model.Courier;
 import com.ardaayvatas.couriertracking.data.dao.model.CourierLocation;
 import com.ardaayvatas.couriertracking.data.dao.model.CourierStoreEntrance;
+import com.ardaayvatas.couriertracking.data.dto.CourierDTO;
 import com.ardaayvatas.couriertracking.data.dto.CourierLocationDTO;
 import com.ardaayvatas.couriertracking.data.dto.CourierStoreEntranceDTO;
+import com.ardaayvatas.couriertracking.data.request.RequestCreateCourier;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+
+import java.util.Optional;
 
 @Mapper(componentModel = "spring")
 public interface CourierMapper {
@@ -30,4 +35,10 @@ public interface CourierMapper {
     @Mapping(source = "courierDTO.id", target = "courier.id")
     @Mapping(source = "storeDTO.id", target = "store.id")
     CourierStoreEntrance toCourierStoreEntrance(CourierStoreEntranceDTO dto);
+
+    CourierDTO toCourierDTO(Courier courier);
+
+    CourierDTO requestCreateCourierToCourier(RequestCreateCourier requestCreateCourier);
+
+    Courier toCourier(CourierDTO courierDTO);
 }

@@ -1,6 +1,6 @@
 package com.ardaayvatas.couriertracking.aspect;
 
-import com.ardaayvatas.couriertracking.service.intf.LogService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -17,36 +17,31 @@ public class ServiceLoggingAspect {
 
     @AfterReturning(pointcut = "execution(* com.ardaayvatas.couriertracking.service..*(..)) || execution(* com.ardaayvatas.couriertracking.event..*(..))",
                     returning = "result")
-    public void logAfterSuccessfulCall(JoinPoint joinPoint, Object result) {
+    public void logAfterSuccessfulCall(JoinPoint joinPoint, Object result) throws JsonProcessingException {
         String methodName = joinPoint.getSignature().getName();
         String serviceName = joinPoint.getSignature().getDeclaringTypeName();
-        String request = extractArguments(joinPoint.getArgs());
-        String response = result != null ? result.toString() : null;
-
-        logService.writeLog(methodName, serviceName, request, response);
+        Object request = extractArguments(joinPoint.getArgs());
+        logService.writeLog(methodName, serviceName, request, result);
     }
 
     @AfterThrowing(pointcut = "execution(* com.ardaayvatas.couriertracking.service..*(..)) || execution(* com.ardaayvatas.couriertracking.event..*(..))",
                    throwing = "ex")
-    public void logAfterExceptionThrown(JoinPoint joinPoint, Throwable ex) {
+    public void logAfterExceptionThrown(JoinPoint joinPoint, Throwable ex) throws JsonProcessingException {
         String methodName = joinPoint.getSignature().getName();
         String serviceName = joinPoint.getSignature().getDeclaringTypeName();
-        String request = extractArguments(joinPoint.getArgs());
-
+        Object request = extractArguments(joinPoint.getArgs());
         logService.writeErrorLog(methodName, serviceName, request, ex);
     }
 
-    private String extractArguments(Object[] args) {
+    private Object extractArguments(Object[] args) {
         if (args == null || args.length == 0) {
             return null;
         }
-
-        StringBuilder sb = new StringBuilder();
-        for (Object arg : args) {
-            sb.append(arg != null ? arg.toString() : "null").append("; ");
+        if (args.length == 1) {
+            return args[0];
         }
 
-        return sb.toString();
+        return args;
     }
 }
 

@@ -24,11 +24,9 @@ public class Store implements Serializable {
     @Column(name = "NAME", length = 100)
     private String name;
 
-    @Column(name = "LAT", precision = 10, scale = 8)
+    @Column(name = "LAT")
     private Double lat;
 
-    @Column(name = "LNG", precision = 10, scale = 8)
+    @Column(name = "LNG")
     private Double lng;
-
-
 }

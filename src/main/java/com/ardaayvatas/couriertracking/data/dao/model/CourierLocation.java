@@ -26,9 +26,9 @@ public class CourierLocation extends BaseEntity implements Serializable {
     @JoinColumn(name = "COURIER_ID")
     private Courier courier;
 
-    @Column(name = "LAT", precision = 10, scale = 8)
+    @Column(name = "LAT")
     private Double lat;
 
-    @Column(name = "LNG", precision = 10, scale = 8)
+    @Column(name = "LNG")
     private Double lng;
 }
