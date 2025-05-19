@@ -1,0 +1,33 @@
+package com.ardaayvatas.couriertracking.data.mapper;
+
+import com.ardaayvatas.couriertracking.data.dao.model.CourierLocation;
+import com.ardaayvatas.couriertracking.data.dao.model.CourierStoreEntrance;
+import com.ardaayvatas.couriertracking.data.dto.CourierLocationDTO;
+import com.ardaayvatas.couriertracking.data.dto.CourierStoreEntranceDTO;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
+
+@Mapper(componentModel = "spring")
+public interface CourierMapper {
+    CourierMapper INSTANCE = Mappers.getMapper(CourierMapper.class);
+
+    @Mapping(source = "courierDTO.id", target = "courier.id")
+    CourierLocation toCourierLocation(CourierLocationDTO dto);
+
+    @Mapping(source = "courier.id", target = "courierDTO.id")
+    CourierLocationDTO toCourierLocationDTO(CourierLocation entity);
+
+    @Mapping(source = "courier.id", target = "courierDTO.id")
+    @Mapping(source = "courier.name", target = "courierDTO.name")
+    @Mapping(source = "courier.surname", target = "courierDTO.surname")
+    @Mapping(source = "store.id", target = "storeDTO.id")
+    @Mapping(source = "store.name", target = "storeDTO.name")
+    @Mapping(source = "store.lat", target = "storeDTO.lat")
+    @Mapping(source = "store.lng", target = "storeDTO.lng")
+    CourierStoreEntranceDTO toCourierStoreEntranceDTO(CourierStoreEntrance entity);
+
+    @Mapping(source = "courierDTO.id", target = "courier.id")
+    @Mapping(source = "storeDTO.id", target = "store.id")
+    CourierStoreEntrance toCourierStoreEntrance(CourierStoreEntranceDTO dto);
+}

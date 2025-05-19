@@ -2,7 +2,8 @@ package com.ardaayvatas.couriertracking.enumeration;
 
 public enum ExceptionType {
     SERVICE_UNAVAILABLE(1L, "An unexpected error occurred."),
-    UNKNOWN_ERROR(2L, "An unexpected error occurred.");
+    UNKNOWN_ERROR(2L, "An unexpected error occurred."),
+    EVENT_ERROR(11111L, "An exception occurred during the event.");
 
     private final Long code;
     private final String message;

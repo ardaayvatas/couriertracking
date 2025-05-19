@@ -15,7 +15,8 @@ public class ServiceLoggingAspect {
 
     private final LogService logService;
 
-    @AfterReturning(pointcut = "execution(* com.ardaayvatas.couriertracking.service..*(..))", returning = "result")
+    @AfterReturning(pointcut = "execution(* com.ardaayvatas.couriertracking.service..*(..)) || execution(* com.ardaayvatas.couriertracking.event..*(..))",
+                    returning = "result")
     public void logAfterSuccessfulCall(JoinPoint joinPoint, Object result) {
         String methodName = joinPoint.getSignature().getName();
         String serviceName = joinPoint.getSignature().getDeclaringTypeName();
@@ -25,7 +26,8 @@ public class ServiceLoggingAspect {
         logService.writeLog(methodName, serviceName, request, response);
     }
 
-    @AfterThrowing(pointcut = "execution(* com.ardaayvatas.couriertracking.service..*(..))", throwing = "ex")
+    @AfterThrowing(pointcut = "execution(* com.ardaayvatas.couriertracking.service..*(..)) || execution(* com.ardaayvatas.couriertracking.event..*(..))",
+                   throwing = "ex")
     public void logAfterExceptionThrown(JoinPoint joinPoint, Throwable ex) {
         String methodName = joinPoint.getSignature().getName();
         String serviceName = joinPoint.getSignature().getDeclaringTypeName();

@@ -4,16 +4,22 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "service_log")
+@Table(name = "SERVICE_LOG")
 @Getter
 @Setter
-public class ServiceLog {
+public class ServiceLog implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1758589907129431L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID", length = 16)
     private Long id;
 
     @Column(name = "SERVICE_NAME", length = 200, nullable = false)
