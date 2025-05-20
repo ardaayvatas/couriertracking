@@ -1,6 +1,8 @@
 package com.ardaayvatas.couriertracking.batch;
 
+import com.ardaayvatas.couriertracking.common.exception.ServiceCallException;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecutionException;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
@@ -18,8 +20,8 @@ public class CourierDistanceJobScheduler {
         this.courierDistanceJob = courierDistanceJob;
     }
 
-    @Scheduled(cron = "35 18 4 * * ?")
-    public void runJob() throws Exception {
+    @Scheduled(cron = "0 00 10 * * ?")
+    public void runJob() throws ServiceCallException, JobExecutionException {
         JobParameters jobParameters = new JobParametersBuilder()
                 .addLong("timestamp", System.currentTimeMillis())
                 .toJobParameters();

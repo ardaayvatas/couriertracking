@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class CourierLocationController {
 
     private final CourierLocationService courierLocationService;
-    private final CourierMapper mapper = CourierMapper.INSTANCE;
+    private static final CourierMapper mapper = CourierMapper.INSTANCE;
 
     @PostMapping
     @Operation(summary = "Logs locations")

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class CourierController {
 
     private final CourierService courierService;
-    private final CourierMapper mapper = CourierMapper.INSTANCE;
+    private static final CourierMapper mapper = CourierMapper.INSTANCE;
 
     @PostMapping
     @Operation(summary = "Create a new courier")

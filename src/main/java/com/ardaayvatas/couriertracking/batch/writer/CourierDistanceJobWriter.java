@@ -22,7 +22,7 @@ public class CourierDistanceJobWriter {
     public ItemWriter<CourierDistanceDTO> writer() {
         return (Chunk<? extends CourierDistanceDTO> items) -> {
             List<CourierDistanceDTO> dtoList = items.getItems().stream()
-                    .map(item -> (CourierDistanceDTO) item)
+                    .map(CourierDistanceDTO.class::cast)
                     .toList();
 
             var entities = courierMapper.toCourierDistance(dtoList);

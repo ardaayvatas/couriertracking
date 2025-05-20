@@ -16,13 +16,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CourierServiceImpl implements CourierService {
     private final CourierRepository courierRepository;
-    private final CourierMapper mapper = CourierMapper.INSTANCE;
+    private static final CourierMapper mapper = CourierMapper.INSTANCE;
 
     @Override
     public CourierDTO findById(Long id) {
         Optional<Courier> optionalCourier = courierRepository.findById(id);
         if (optionalCourier.isPresent()) {
-            return CourierMapper.INSTANCE.toCourierDTO(optionalCourier.get());
+            return mapper.toCourierDTO(optionalCourier.get());
         } else {
             throw new BusinessException(ExceptionType.COURIER_NOT_FOUND);
         }

@@ -38,7 +38,7 @@ public class CourierLocationServiceImpl implements CourierLocationService {
         return courierMapper.toCourierLocationDTO(courierLocationRepository.findByCourierIdAndCreatedDateBetween(courierId, startDate, endDate));
     }
 
-    private Boolean isExistCourier(Long id) {
+    private boolean isExistCourier(Long id) {
         return courierService.existById(id);
     }
 }

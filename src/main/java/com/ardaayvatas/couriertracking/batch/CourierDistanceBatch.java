@@ -11,6 +11,7 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -20,6 +21,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class CourierDistanceBatch {
 
     private final CourierDistanceRepository courierDistanceRepository;
+
+    @Value("${batch.courier-distance-batch.chunk-size:10}")
+    private Integer chunkSize;
 
     @Bean
     public Step courierDistanceStep(JobRepository jobRepository,
@@ -31,7 +35,7 @@ public class CourierDistanceBatch {
         courierDistanceRepository.deleteAll();
 
         return new StepBuilder("courierDistanceStep", jobRepository)
-                .<Long, CourierDistanceDTO>chunk(100, transactionManager)
+                .<Long, CourierDistanceDTO>chunk(chunkSize, transactionManager)
                 .reader(courierIdReader)
                 .processor(processor)
                 .writer(writer)

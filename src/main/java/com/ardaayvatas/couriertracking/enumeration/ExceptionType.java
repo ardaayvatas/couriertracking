@@ -1,7 +1,10 @@
 package com.ardaayvatas.couriertracking.enumeration;
 
+import lombok.Getter;
+
+@Getter
 public enum ExceptionType {
-    UNKNOWN_ERROR(2L, "An unexpected error occurred."),
+    UNKNOWN_ERROR(44444L, "An unexpected error occurred."),
     EVENT_ERROR(11111L, "An exception occurred during the event."),
     COURIER_NOT_FOUND(123L, "Courier not found." );
 
@@ -13,11 +16,4 @@ public enum ExceptionType {
         this.message = message;
     }
 
-    public Long getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 }
