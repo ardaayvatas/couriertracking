@@ -1,4 +1,4 @@
-package com.ardaayvatas.couriertracking.aspect;
+package com.ardaayvatas.couriertracking.common.aspect;
 
 import com.ardaayvatas.couriertracking.data.dao.model.ErrorLog;
 import com.ardaayvatas.couriertracking.data.dao.model.ServiceLog;

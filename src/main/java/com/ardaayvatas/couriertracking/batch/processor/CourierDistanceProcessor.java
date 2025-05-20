@@ -4,10 +4,11 @@ import com.ardaayvatas.couriertracking.data.dto.CourierDTO;
 import com.ardaayvatas.couriertracking.data.dto.CourierDistanceDTO;
 import com.ardaayvatas.couriertracking.data.dto.CourierLocationDTO;
 import com.ardaayvatas.couriertracking.data.dto.CourierStoreEntranceDTO;
-import com.ardaayvatas.couriertracking.service.DistanceCalculatorServiceImpl;
+import com.ardaayvatas.couriertracking.service.HaversineDistanceCalculatorServiceImpl;
 import com.ardaayvatas.couriertracking.service.intf.CourierLocationService;
 import com.ardaayvatas.couriertracking.service.intf.CourierService;
 import com.ardaayvatas.couriertracking.service.intf.CourierStoreEntranceService;
+import com.ardaayvatas.couriertracking.service.intf.DistanceCalculationStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +26,7 @@ public class CourierDistanceProcessor {
     private final CourierService courierService;
     private final CourierLocationService courierLocationService;
     private final CourierStoreEntranceService courierStoreEntranceService;
-    private final DistanceCalculatorServiceImpl distanceCalculatorService;
+    private final HaversineDistanceCalculatorServiceImpl haversineDistanceCalculatorService;
 
 
     @Bean
@@ -40,7 +41,7 @@ public class CourierDistanceProcessor {
             List<CourierLocationDTO> locations = courierLocationService.findByCourierIdAndCreatedDateBetween(courierId, startDate, endDate);
             List<CourierStoreEntranceDTO> entrances = courierStoreEntranceService.findByCourierIdAndCreatedDateBetween(courierId, startDate, endDate);
 
-            double totalDistance = distanceCalculatorService.calculateTotalDistance(locations);
+            double totalDistance = calculateTotalDistance(haversineDistanceCalculatorService, locations);
             int entranceCount = entrances.size();
 
             return createCourierDistanceDTO(courierDTO, totalDistance, entranceCount);
@@ -53,6 +54,10 @@ public class CourierDistanceProcessor {
                 storeEntranceCount(entranceCount).
                 totalDistance(totalDistance).
                 build();
+    }
+
+    private double calculateTotalDistance(DistanceCalculationStrategy distanceCalculationStrategy, List<CourierLocationDTO> locations) {
+        return distanceCalculationStrategy.calculateTotalDistance(locations);
     }
 
 }

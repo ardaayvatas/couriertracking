@@ -1,4 +1,4 @@
-package com.ardaayvatas.couriertracking.aspect;
+package com.ardaayvatas.couriertracking.common.aspect;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;

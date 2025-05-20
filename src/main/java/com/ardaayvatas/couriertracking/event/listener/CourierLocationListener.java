@@ -8,6 +8,7 @@ import com.ardaayvatas.couriertracking.data.dto.StoreDTO;
 import com.ardaayvatas.couriertracking.data.mapper.CourierMapper;
 import com.ardaayvatas.couriertracking.enumeration.ExceptionType;
 import com.ardaayvatas.couriertracking.event.CourierLocationEvent;
+import com.ardaayvatas.couriertracking.service.HaversineDistanceCalculatorServiceImpl;
 import com.ardaayvatas.couriertracking.service.intf.CourierStoreEntranceService;
 import com.ardaayvatas.couriertracking.service.intf.DistanceCalculationStrategy;
 import com.ardaayvatas.couriertracking.service.intf.StoreService;
@@ -27,7 +28,7 @@ import java.util.List;
 public class CourierLocationListener {
     private final StoreService storeService;
     private final CourierStoreEntranceService courierStoreEntranceService;
-    private final DistanceCalculationStrategy distanceCalculationStrategy;
+    private final HaversineDistanceCalculatorServiceImpl haversineDistanceCalculatorService;
     private final CourierMapper courierMapper;
 
     private static final int MAX_DISTANCE = 100;
@@ -45,7 +46,7 @@ public class CourierLocationListener {
         List<StoreDTO> storeDTOList = storeService.findAll();
 
         for (StoreDTO storeDTO : storeDTOList) {
-            double distance = calculateDistance(location.getLat(), location.getLng(), storeDTO.getLat(), storeDTO.getLng());
+            double distance = calculateDistance(location.getLat(), location.getLng(), storeDTO.getLat(), storeDTO.getLng(), haversineDistanceCalculatorService);
             if (distance <= MAX_DISTANCE) {
                 boolean reEntered = hasRecentEntrance(location.getCourierDTO().getId(),storeDTO.getId());
                 if (!reEntered) {
@@ -64,7 +65,7 @@ public class CourierLocationListener {
         return courierStoreEntranceService.existsByCourierIdAndStoreIdAndCreatedDateAfter(courierId, storeId, LocalDateTime.now().minusMinutes(1));
     }
 
-    private double calculateDistance(Double lat1, Double lng1, Double lat2, Double lng2) {
+    private double calculateDistance(Double lat1, Double lng1, Double lat2, Double lng2, DistanceCalculationStrategy distanceCalculationStrategy) {
         return distanceCalculationStrategy.calculateDistance(lat1, lng1, lat2, lng2);
     }
 

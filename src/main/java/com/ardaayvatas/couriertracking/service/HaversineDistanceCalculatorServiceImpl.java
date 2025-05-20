@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DistanceCalculatorServiceImpl implements DistanceCalculationStrategy {
+public class HaversineDistanceCalculatorServiceImpl implements DistanceCalculationStrategy {
     @Override
     public double calculateDistance(double lat1, double lng1, double lat2, double lng2) {
         final int earthRadius = 6371000;
