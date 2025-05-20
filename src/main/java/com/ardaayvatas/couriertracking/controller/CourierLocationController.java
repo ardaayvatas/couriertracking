@@ -7,6 +7,7 @@ import com.ardaayvatas.couriertracking.data.response.ResponseCreateCourierLocati
 import com.ardaayvatas.couriertracking.service.intf.CourierLocationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class CourierLocationController {
 
     @PostMapping
     @Operation(summary = "Logs locations")
-    public ResponseEntity<ResponseCreateCourierLocation> createCourierLocation(@RequestBody RequestCreateCourierLocation requestCreateCourierLocation) {
+    public ResponseEntity<ResponseCreateCourierLocation> createCourierLocation(@Valid @RequestBody RequestCreateCourierLocation requestCreateCourierLocation) {
         return ResponseEntity.ok(mapper.courierLocationDTOToResponseCreateCourierLocation(courierLocationService.createCourierLocation(mapper.requestCreateCourierLocationToCourierLocationDTO(requestCreateCourierLocation))));
     }
 

@@ -8,6 +8,7 @@ import com.ardaayvatas.couriertracking.service.intf.CourierService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class CourierController {
 
     @PostMapping
     @Operation(summary = "Create a new courier")
-    public ResponseEntity<ResponseCreateCourier> createCourier(@RequestBody RequestCreateCourier requestCreateCourier) {
+    public ResponseEntity<ResponseCreateCourier> createCourier(@Valid @RequestBody RequestCreateCourier requestCreateCourier) {
         return ResponseEntity.ok(mapper.toResponseCreateCourier(courierService.saveCourier(mapper.requestCreateCourierToCourier(requestCreateCourier))));
     }
 

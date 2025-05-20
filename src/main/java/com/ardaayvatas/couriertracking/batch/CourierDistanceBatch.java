@@ -11,6 +11,7 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,8 +33,6 @@ public class CourierDistanceBatch {
                                     ItemProcessor<Long, CourierDistanceDTO> processor,
                                     ItemWriter<CourierDistanceDTO> writer) {
 
-        courierDistanceRepository.deleteAll();
-
         return new StepBuilder("courierDistanceStep", jobRepository)
                 .<Long, CourierDistanceDTO>chunk(chunkSize, transactionManager)
                 .reader(courierIdReader)
@@ -43,9 +42,21 @@ public class CourierDistanceBatch {
     }
 
     @Bean
-    public Job courierDistanceJob(JobRepository jobRepository, Step courierDistanceStep) {
+    public Job courierDistanceJob(JobRepository jobRepository, Step courierDistanceStep, Step deleteCourierDistancesStep) {
         return new JobBuilder("courierDistanceJob", jobRepository)
-                .start(courierDistanceStep)
+                .start(deleteCourierDistancesStep)
+                .next(courierDistanceStep)
                 .build();
     }
+
+    @Bean
+    public Step deleteCourierDistancesStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+        return new StepBuilder("deleteCourierDistancesStep", jobRepository)
+                .tasklet((contribution, chunkContext) -> {
+                    courierDistanceRepository.deleteAll();
+                    return RepeatStatus.FINISHED;
+                }, transactionManager)
+                .build();
+    }
+
 }
