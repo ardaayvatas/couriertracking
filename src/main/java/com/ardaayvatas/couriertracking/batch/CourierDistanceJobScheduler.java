@@ -20,7 +20,7 @@ public class CourierDistanceJobScheduler {
         this.courierDistanceJob = courierDistanceJob;
     }
 
-    @Scheduled(cron = "0 00 10 * * ?")
+    @Scheduled(cron = "0 15 0 * * ?")
     public void runJob() throws ServiceCallException, JobExecutionException {
         JobParameters jobParameters = new JobParametersBuilder()
                 .addLong("timestamp", System.currentTimeMillis())

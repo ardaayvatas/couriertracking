@@ -10,6 +10,7 @@ import com.ardaayvatas.couriertracking.data.dto.CourierLocationDTO;
 import com.ardaayvatas.couriertracking.data.dto.CourierStoreEntranceDTO;
 import com.ardaayvatas.couriertracking.data.request.RequestCreateCourier;
 import com.ardaayvatas.couriertracking.data.request.RequestCreateCourierLocation;
+import com.ardaayvatas.couriertracking.data.response.ResponseCourierDistance;
 import com.ardaayvatas.couriertracking.data.response.ResponseCreateCourier;
 import com.ardaayvatas.couriertracking.data.response.ResponseCreateCourierLocation;
 import org.mapstruct.Mapper;
@@ -64,4 +65,7 @@ public interface CourierMapper {
 
     @Mapping(source = "courierDTO", target = "courier")
     CourierDistance toCourierDistance(CourierDistanceDTO courierDistanceDTO);
+
+    @Mapping(source = "courier.id", target = "courierId")
+    ResponseCourierDistance toResponseCourierDistance(CourierDistance courierDistance);
 }

@@ -1,14 +1,14 @@
 package com.ardaayvatas.couriertracking.data.request;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class RequestCreateCourier {
-    @NotNull
+    @NotBlank
     private String name;
-    @NotNull
+    @NotBlank
     private String surname;
 }

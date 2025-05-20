@@ -53,7 +53,7 @@ public class CourierDistanceBatch {
     public Step deleteCourierDistancesStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
         return new StepBuilder("deleteCourierDistancesStep", jobRepository)
                 .tasklet((contribution, chunkContext) -> {
-                    courierDistanceRepository.deleteAll();
+                    courierDistanceRepository.deleteAllInBatch();
                     return RepeatStatus.FINISHED;
                 }, transactionManager)
                 .build();
