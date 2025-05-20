@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -27,6 +26,9 @@ public class CourierDistance extends BaseEntity implements Serializable {
     @JoinColumn(name = "COURIER_ID")
     private Courier courier;
 
-    @Column(name = "TOTAL_DISTANCE", precision = 25, scale = 2)
-    private BigDecimal totalDistance;
+    @Column(name = "TOTAL_DISTANCE")
+    private double totalDistance;
+
+    @Column(name = "STORE_ENTRANCE_COUNT", length = 8)
+    private Integer storeEntranceCount;
 }

@@ -1,0 +1,47 @@
+package com.ardaayvatas.couriertracking.batch;
+
+import com.ardaayvatas.couriertracking.data.dao.repository.CourierDistanceRepository;
+import com.ardaayvatas.couriertracking.data.dto.CourierDistanceDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.Step;
+import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.PlatformTransactionManager;
+
+@Configuration
+@RequiredArgsConstructor
+public class CourierDistanceBatch {
+
+    private final CourierDistanceRepository courierDistanceRepository;
+
+    @Bean
+    public Step courierDistanceStep(JobRepository jobRepository,
+                                    PlatformTransactionManager transactionManager,
+                                    ItemReader<Long> courierIdReader,
+                                    ItemProcessor<Long, CourierDistanceDTO> processor,
+                                    ItemWriter<CourierDistanceDTO> writer) {
+
+        courierDistanceRepository.deleteAll();
+
+        return new StepBuilder("courierDistanceStep", jobRepository)
+                .<Long, CourierDistanceDTO>chunk(100, transactionManager)
+                .reader(courierIdReader)
+                .processor(processor)
+                .writer(writer)
+                .build();
+    }
+
+    @Bean
+    public Job courierDistanceJob(JobRepository jobRepository, Step courierDistanceStep) {
+        return new JobBuilder("courierDistanceJob", jobRepository)
+                .start(courierDistanceStep)
+                .build();
+    }
+}

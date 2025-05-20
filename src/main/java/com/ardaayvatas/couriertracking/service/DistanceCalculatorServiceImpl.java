@@ -1,7 +1,10 @@
 package com.ardaayvatas.couriertracking.service;
 
+import com.ardaayvatas.couriertracking.data.dto.CourierLocationDTO;
 import com.ardaayvatas.couriertracking.service.intf.DistanceCalculationStrategy;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class DistanceCalculatorServiceImpl implements DistanceCalculationStrategy {
@@ -18,4 +21,25 @@ public class DistanceCalculatorServiceImpl implements DistanceCalculationStrateg
 
         return earthRadius * c;
     }
+
+    @Override
+    public double calculateTotalDistance(List<CourierLocationDTO> locations) {
+        double totalDistance = 0.0;
+
+        if (locations == null || locations.size() < 2) {
+            return 0;
+        }
+
+        for (int i = 1; i < locations.size(); i++) {
+            CourierLocationDTO prev = locations.get(i - 1);
+            CourierLocationDTO current = locations.get(i);
+
+            totalDistance += calculateDistance(
+                    prev.getLat(), prev.getLng(),
+                    current.getLat(), current.getLng()
+            );
+        }
+        return totalDistance;
+    }
+
 }

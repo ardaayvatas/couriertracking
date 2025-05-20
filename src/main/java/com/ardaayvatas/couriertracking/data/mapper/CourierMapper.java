@@ -1,9 +1,11 @@
 package com.ardaayvatas.couriertracking.data.mapper;
 
 import com.ardaayvatas.couriertracking.data.dao.model.Courier;
+import com.ardaayvatas.couriertracking.data.dao.model.CourierDistance;
 import com.ardaayvatas.couriertracking.data.dao.model.CourierLocation;
 import com.ardaayvatas.couriertracking.data.dao.model.CourierStoreEntrance;
 import com.ardaayvatas.couriertracking.data.dto.CourierDTO;
+import com.ardaayvatas.couriertracking.data.dto.CourierDistanceDTO;
 import com.ardaayvatas.couriertracking.data.dto.CourierLocationDTO;
 import com.ardaayvatas.couriertracking.data.dto.CourierStoreEntranceDTO;
 import com.ardaayvatas.couriertracking.data.request.RequestCreateCourier;
@@ -14,7 +16,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-import java.util.Optional;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CourierMapper {
@@ -24,7 +26,7 @@ public interface CourierMapper {
     CourierLocation toCourierLocation(CourierLocationDTO dto);
 
     @Mapping(source = "courier.id", target = "courierDTO.id")
-    CourierLocationDTO toCourierLocationDTO(CourierLocation entity);
+    List<CourierLocationDTO> toCourierLocationDTO(List<CourierLocation> entity);
 
     @Mapping(source = "courier.id", target = "courierDTO.id")
     @Mapping(source = "courier.name", target = "courierDTO.name")
@@ -33,7 +35,7 @@ public interface CourierMapper {
     @Mapping(source = "store.name", target = "storeDTO.name")
     @Mapping(source = "store.lat", target = "storeDTO.lat")
     @Mapping(source = "store.lng", target = "storeDTO.lng")
-    CourierStoreEntranceDTO toCourierStoreEntranceDTO(CourierStoreEntrance entity);
+    List<CourierStoreEntranceDTO> toCourierStoreEntranceDTO(List<CourierStoreEntrance> entity);
 
     @Mapping(source = "courierDTO.id", target = "courier.id")
     @Mapping(source = "storeDTO.id", target = "store.id")
@@ -57,4 +59,9 @@ public interface CourierMapper {
 
     @Mapping(source = "courierDTO.id", target = "courierId")
     ResponseCreateCourierLocation courierLocationDTOToResponseCreateCourierLocation(CourierLocationDTO courierLocation);
+
+    List<CourierDistance> toCourierDistance(List<CourierDistanceDTO> courierDistanceDTO);
+
+    @Mapping(source = "courierDTO", target = "courier")
+    CourierDistance toCourierDistance(CourierDistanceDTO courierDistanceDTO);
 }

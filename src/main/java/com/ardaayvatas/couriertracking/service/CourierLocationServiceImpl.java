@@ -11,6 +11,10 @@ import com.ardaayvatas.couriertracking.service.intf.CourierService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CourierLocationServiceImpl implements CourierLocationService {
@@ -28,6 +32,11 @@ public class CourierLocationServiceImpl implements CourierLocationService {
         } else {
             throw new BusinessException(ExceptionType.COURIER_NOT_FOUND);
         }
+    }
+
+    @Override
+    public List<CourierLocationDTO> findByCourierIdAndCreatedDateBetween(Long courierId, LocalDateTime startDate, LocalDateTime endDate) {
+        return courierMapper.toCourierLocationDTO(courierLocationRepository.findByCourierIdAndCreatedDateBetween(courierId, startDate, endDate));
     }
 
     private Boolean isExistCourier(Long id) {
