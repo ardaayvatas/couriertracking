@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,4 +27,13 @@ public class Courier extends BaseEntity implements Serializable {
     
     @Column(name = "SURNAME", length = 100)
     private String surname;
+
+    @OneToMany(mappedBy = "courier", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<CourierLocation> courierLocationList;
+
+    @OneToOne(mappedBy = "courier", cascade = CascadeType.ALL)
+    private CourierDistance courierDistance;
+
+    @OneToMany(mappedBy = "courier", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<CourierStoreEntrance> courierStoreEntranceList;
 }
