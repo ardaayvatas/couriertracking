@@ -11,7 +11,6 @@ import com.ardaayvatas.couriertracking.service.intf.CourierService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
