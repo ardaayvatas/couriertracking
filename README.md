@@ -107,4 +107,34 @@ If you have Docker installed, you can start the entire system (application + dat
 
 http://localhost:8081/swagger-ui/index.html
 
+## **Request:**
+curl -X 'POST' \
+'http://localhost:8081/api/couriers' \
+-H 'accept: */*' \
+-H 'Content-Type: application/json' \
+-d '{
+"name": "string",
+"surname": "string"
+}'
 
+url -X 'GET' \
+'http://localhost:8081/api/couriers/2' \
+-H 'accept: */*'
+
+curl -X 'DELETE' \
+'http://localhost:8081/api/couriers/2' \
+-H 'accept: */*'
+
+curl -X 'POST' \
+'http://localhost:8081/api/courier-locations' \
+-H 'accept: */*' \
+-H 'Content-Type: application/json' \
+-d '{
+"courierId": 2,
+"lat": 233.13213,
+"lng": 42141.214141
+}'
+
+curl -X 'GET' \
+'http://localhost:8081/api/courier-distance/1' \
+-H 'accept: */*'
